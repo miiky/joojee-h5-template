@@ -2,13 +2,11 @@
     <div class="main"></div>
 </template>
 <script>
-export default {
-  
-}
+export default {}
 </script>
 <style lang="less" scoped>
-.main{
-    position: absolute;
+.main {
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
