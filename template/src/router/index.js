@@ -4,29 +4,32 @@ Vue.use(Router)
 
 import * as utils from '@/utils/index'
 
-import Home from '@/views/home/home'
+import Home from '@/views/home/index'
 
 const router = new Router({
   mode: 'history',
   base: '/projectName/',
-  routes: [{
-    path: '/',
-    name: 'home',
-    meta: {
-      index: 1,
-      title: 'Miiky模板',
-      // switch: false,
-      // menuBar: { id: 1, imgFont: 'e675' },
-      menuBars: [{
-          id: 2,
-          imgFont: 'e69f',
-          name: '我的主页'
-        }
-        // { id: 11, imgFont: 'e6a0', name: '通知' }
-      ]
-    },
-    component: Home
-  }]
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      meta: {
+        index: 1,
+        title: 'Miiky模板',
+        // switch: false,
+        // menuBar: { id: 1, imgFont: 'e675' },
+        menuBars: [
+          {
+            id: 2,
+            imgFont: 'e69f',
+            name: '我的主页'
+          }
+          // { id: 11, imgFont: 'e6a0', name: '通知' }
+        ]
+      },
+      component: Home
+    }
+  ]
 })
 
 router.beforeEach((to, from, next) => {
