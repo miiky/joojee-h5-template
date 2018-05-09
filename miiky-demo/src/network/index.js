@@ -21,9 +21,7 @@ const REDIRECT_RUL = _isPro
   ? 'https://static.joojee.cn/swwd'
   : 'http://192.168.1.222:8080/'
 
-let net = {}
-
-net.redirect_uri_for_code =
+export const redirect_uri_for_code =
   JOOJEE_OAUTH_URL +
   '/oauth/authorize?client_id=' +
   client_id +
@@ -35,7 +33,7 @@ net.redirect_uri_for_code =
  * @param {* 回调参数} code
  * @param {* 回调地址} uri
  */
-net.getServerToken = code =>
+export let getServerToken = code =>
   Axios.post(JOOJEE_OAUTH_URL + '/oauth/token', {
     client_id: client_id,
     client_secret: client_secret,
@@ -47,7 +45,7 @@ net.getServerToken = code =>
  * @param {* 回调参数} code
  * @param {* 回调地址} uri
  */
-net.getUserToken = code =>
+export let getUserToken = code =>
   Axios.post(JOOJEE_OAUTH_URL + '/oauth/token', {
     client_id: client_id,
     client_secret: client_secret,
@@ -60,9 +58,7 @@ net.getUserToken = code =>
  * 3、获取sessionKey
  * @param {用户token} token
  */
-net.getSessionKey = token =>
+export let getSessionKey = token =>
   Axios.post(SWWD_API_URL + '/login', {
     access_token: token
   })
-
-export default net

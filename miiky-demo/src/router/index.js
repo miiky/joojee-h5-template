@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-import utils from '@/utils/index'
+import * as utils from '@/utils/index'
 
 import Home from '@/views/home/index'
 

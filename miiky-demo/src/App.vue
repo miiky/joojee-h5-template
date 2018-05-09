@@ -12,7 +12,7 @@
     <div v-transfer-dom>
       <popup :value="showPopup" position="top" :show-mask="false">
         <div class="popup-msg" :class="popupType?'popup-msg-success':'popup-msg-error'">
-          <i class="iconfont msg-icon" :class="popupType?'icon-queding1':'icon-xinxiyouwu1'"></i>{{popupMsg}}
+          <i class="iconfont msg-icon" :class="popupType?'icon-queding1':'icon-xinxiyouwu1'"></i>
         </div>
       </popup>
     </div>
@@ -27,6 +27,9 @@ import {
   TransferDomDirective as TransferDom
 } from 'vux'
 import { mapGetters, mapState, mapMutations } from 'vuex'
+
+import * as Net from '@/network/index'
+import * as Utils from '@/utils/index'
 
 export default {
   directives: {
@@ -65,7 +68,7 @@ export default {
   async created() {
     const _this = this
     //如果没有服务token则获取服务token
-    if (_this.$utils.isEmpty(_this.serverAccessToken)) {
+    if (Utils.isEmpty(_this.serverAccessToken)) {
       await _this._initToken()
     }
     // await Utils.initOauth()
@@ -77,7 +80,7 @@ export default {
     async _initToken() {
       // 获取token
       const _this = this
-      await _this.$net.getServerToken().then(res => {
+      await Net.getServerToken().then(res => {
         //将获取的token和code放到store中去管理状态
         _this.setServerAccessToken({
           token: res.data.access_token,
