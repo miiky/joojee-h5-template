@@ -3,7 +3,7 @@
     <popup :value="show" position="top" :show-mask="false" :should-scroll-top-on-show='true'>
       <div class="popup-msg" :class="color">
         <i class="iconfont msg-icon" :class="icon"></i>
-        <span>{{info}}</span>
+        <span v-html="info"></span>
       </div>
     </popup>
   </div>
