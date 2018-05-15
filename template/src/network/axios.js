@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '@/store/index'
-import { md5 } from 'vux'
+import {
+  md5
+} from 'vux'
 
 const Axios = axios.create()
 
@@ -50,6 +52,7 @@ Axios.interceptors.response.use(
     return response
   },
   err => {
+    // 对响应错误做点什么
     if (err && err.response) {
       switch (err.response.status) {
         case 400:
@@ -102,16 +105,18 @@ Axios.interceptors.response.use(
       }
       let payload = md5(err.response.config.method + err.response.config.url)
       store.commit('popRequest', payload)
-      store.dispatch('showPopupAction', { type: false, msg: err.message })
+      store.dispatch('showPopupAction', {
+        type: 'error',
+        msg: err.message
+      })
     } else {
       store.commit('clearRequest')
       store.dispatch('showPopupAction', {
-        type: false,
+        type: 'error',
         msg: '服务器异常',
         time: 3000
       })
     }
-    // 对响应错误做点什么
     return Promise.reject(err)
   }
 )

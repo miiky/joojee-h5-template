@@ -9,24 +9,15 @@
       <router-view></router-view>
     </transition>
     <!-- </keep-alive> -->
-    <div v-transfer-dom>
-      <popup :value="showPopup" position="top" :show-mask="false">
-        <div class="popup-msg" :class="popupType?'popup-msg-success':'popup-msg-error'">
-          <i class="iconfont msg-icon" :class="popupType?'icon-queding1':'icon-xinxiyouwu1'"></i>{{popupMsg}}
-        </div>
-      </popup>
-    </div>
+    <miiky-popup :show="showPopup" :info="popupMsg" :type="popupType"></miiky-popup>
   </div>
 </template>
 
 <script>
-import {
-  Popup,
-  LoadMore,
-  Loading,
-  TransferDomDirective as TransferDom
-} from 'vux'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { LoadMore, Loading, TransferDomDirective as TransferDom } from 'vux'
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
+import MiikyPopup from '@/components/miiky-popup.vue'
+import socket from '@/network/socket'
 
 export default {
   directives: {
@@ -53,35 +44,39 @@ export default {
   computed: {
     ...mapGetters([
       'serverAccessToken',
-      'userAccessToken',
-      'sessionKey',
       'loading',
       'topLoading',
       'showPopup',
       'popupType',
-      'popupMsg'
+      'popupMsg',
+      'userId'
     ])
   },
   async created() {
     const _this = this
     //如果没有服务token则获取服务token
-    if (_this.$utils.isEmpty(_this.serverAccessToken)) {
-      await _this._initToken()
+    if (_this.$tools.isEmpty(_this.serverAccessToken)) {
+      await _this.$store.dispatch('initToken')
     }
-    // await Utils.initOauth()
-    // await _this._initUserId()
+    if (!_this.$tools.isEmpty(_this.userId)) {
+      socket(_this.userId)
+      _this._handleSockMsg()
+    }
   },
-  components: { Popup, LoadMore, Loading },
+  components: { LoadMore, Loading, MiikyPopup },
   methods: {
-    ...mapMutations(['setServerAccessToken', 'setUserId']),
-    async _initToken() {
-      // 获取token
+    ...mapMutations(['setServerAccessToken']),
+    ...mapActions(['showPopupAction', 'initToken']),
+    _handleSockMsg() {
       const _this = this
-      await _this.$net.getServerToken().then(res => {
-        //将获取的token和code放到store中去管理状态
-        _this.setServerAccessToken({
-          token: res.data.access_token,
-          expires: res.data.expires_in
+      _this.$bus.$on('handleSockMsg', data => {
+        console.log('data', data)
+        let obj = JSON.parse(data)
+        let msg = '【' + obj.realname + '】' + obj.operateDesc
+        _this.showPopupAction({
+          type: 'info',
+          msg: msg,
+          time: 3000
         })
       })
     }
@@ -93,36 +88,19 @@ export default {
 @import '~vux/src/styles/reset.less';
 
 body {
-  background-color: #f5f5f5 !important;
+  background-color: white;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
 }
-
 html {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 }
 html::-webkit-scrollbar {
   width: 0px;
-}
-
-.popup-msg {
-  background-color: white;
-  font-size: 14px;
-  padding: 12px;
-  border-bottom: 1px solid #f8f8f8;
-  .msg-icon {
-    margin-right: 5px;
-  }
-}
-.popup-msg-error {
-  color: red;
-}
-.popup-msg-success {
-  color: green;
 }
 
 slide-right-enter-active,
@@ -148,5 +126,10 @@ slide-right-enter-active,
 .slide-left-leave-active {
   opacity: 0;
   transform: translate3d(-100%, 0, 0);
+}
+
+.item-poptip {
+  min-width: 130px;
+  margin-right: 15px;
 }
 </style>
