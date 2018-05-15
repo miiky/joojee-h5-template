@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <div class="btn" @click="login">需要登录</div>
-    <div>{{'服务token:'+serverAccessToken}}</div>
-    <div>{{'用户token:'+userAccessToken}}</div>
-    <div>{{'sessionKey:'+sessionKey}}</div>
-    <div>{{'用户ID:'+userId}}</div>
+    <div>服务token:{{serverAccessToken}}</div>
+    <div>用户token:{{userAccessToken}}</div>
+    <div>sessionKey:{{sessionKey}}</div>
+    <div>用户ID:{{userId}}</div>
     <div class="btn" @click="showTopLoading">显示头部loading</div>
     <div class="btn" @click="showPup('success')">成功提示</div>
     <div class="btn" @click="showPup('wraning')">警告提示</div>
